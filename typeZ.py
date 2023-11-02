@@ -45,43 +45,32 @@ class Spin_wave():
                     Sif = [self.J * S[3 * fo + 0], self.J * S[3 * fo + 1], self.J * S[3 * fo + 2]]
 
                     if t > Bi[0] and t <= Bi[1]:
-                        B_e = [self.B[0] + self.Kx * S[0] / (Snorm * Snorm) + self.beta * Bi[2][0],
-                               self.B[1] + self.Ky * S[1] / (Snorm * Snorm) + self.beta * Bi[2][1],
-                               self.B[2] + self.Kz * S[2] / (Snorm * Snorm) + self.beta * Bi[2][2]]
-
-                        B_sc = [Sib[0] + Sif[0] + self.B[0] + self.sc * Bi[2][0], Sib[1] + Sif[1] + self.B[1] + self.sc * Bi[2][1],
-                                Sib[2] + Sif[2] + self.B[2] + self.sc * Bi[2][2]]
-                        B_fi = [Sib[0] + Sif[0] + self.B[0] + self.fi * Bi[2][0], Sib[1] + Sif[1] + self.B[1] + self.fi * Bi[2][1],
-                                Sib[2] + Sif[2] + self.B[2] + self.fi * Bi[2][2]]
+                        B_e = [Sib[0] + Sif[0] + self.B[0] + self.Kx * Si[0] / (Snorm * Snorm) + self.beta * Bi[2][0],
+                               Sib[1] + Sif[1] + self.B[1] + self.Ky * Si[1] / (Snorm * Snorm) + self.beta * Bi[2][1],
+                               Sib[2] + Sif[2] + self.B[2] + self.Kz * Si[2] / (Snorm * Snorm) + self.beta * Bi[2][2]]
 
                         sc_torque = [
-                            self.gamma * (S[1] * (self.spin_flow[0] * S[1] - self.spin_flow[1] * S[0]) - S[2] * (
-                                    self.spin_flow[2] * S[0] - self.spin_flow[0] * S[2])), self.gamma * (
-                                    S[2] * (self.spin_flow[1] * S[2] - self.spin_flow[2] * S[1]) - S[0] * (
-                                    self.spin_flow[0] * S[1] - self.spin_flow[1] * S[0])), self.gamma * (
-                                    S[0] * (self.spin_flow[2] * S[0] - self.spin_flow[0] * S[2]) - S[1] * (
-                                    self.spin_flow[1] * S[2] - self.spin_flow[2] * S[1]))]
+                            self.gamma * (Si[1] * (Bi[2][0] * Si[1] -  Bi[2][1] * Si[0]) - Si[2] * (
+                                    Bi[2][2] * Si[0] - Bi[2][0] * Si[2])), self.gamma * (
+                                    Si[2] * ( Bi[2][1] * Si[2] -  Bi[2][2] * Si[1]) - Si[0] * (
+                                    Bi[2][0] * Si[1] -  Bi[2][1] * Si[0])), self.gamma * (
+                                    Si[0] * ( Bi[2][2] * Si[0] - Bi[2][0] * Si[2]) - Si[1] * (
+                                    Bi[2][1] * Si[2] -  Bi[2][2] * Si[1]))]
                         break
 
                     else:
-                        B_e = [self.B[0] + self.Kx * S[0] / (Snorm * Snorm), self.B[1] + self.Ky * S[1]/(Snorm * Snorm), self.B[2] + self.Kz * S[2]/(Snorm * Snorm)]
-                        B_fi = [Sib[0] + Sif[0] + self.B[0], Sib[1] + Sif[1] + self.B[1],Sib[2] + Sif[2] + self.B[2]]
+                        B_e = [Sib[0] + Sif[0] + self.B[0] + self.Kx * Si[0] / (Snorm * Snorm), Sib[1] + Sif[1] + self.B[1] + self.Ky * Si[1]/(Snorm * Snorm), Sib[2] + Sif[2] + self.B[2] + self.Kz * Si[2]/(Snorm * Snorm)]
                         sc_torque = [0,0,0]
 
-
-
-
-
-
-                dSixdt = - self.gamma * (B_e[2] * Si[1] - B_e[1] * S[2]) - sc_torque[0] - (self.alpha / Snorm) * (
+                dSixdt = - self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]) - sc_torque[0] - (self.alpha / Snorm) * (
                             Si[1] * (self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1])) - Si[2] *
                                 self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]))
-                dSiydt = - self.gamma * (B_sc[2] * Si[0] - B_sc[0] * Si[2]) + KneZ[1] - (self.alpha / Snorm) * (
-                            Si[2] * (self.gamma * (B_fi[1] * Si[2] - B_fi[2] * Si[1]) + KneZ[0]) - Si[0] * (
-                                self.gamma * (B_fi[0] * Si[1] - B_fi[1] * Si[0]) + KneZ[2]))
-                dSizdt = - self.gamma * (B_sc[0] * S[1] - B_sc[1] * S[0]) + KneZ[2] - (self.alpha / Snorm) * (
-                            Si[0] * (self.gamma * (B_fi[2] * Si[0] - B_fi[0] * Si[2]) + KneZ[1]) - S[1] * (
-                                self.gamma * (B_fi[1] * Si[2] - B_fi[2] * Si[1]) + KneZ[0]))
+                dSiydt = - self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]) - sc_torque[1] - (self.alpha / Snorm) * (
+                            Si[2] * (self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2])) - Si[0] *
+                                self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1]) )
+                dSizdt = - self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1]) - sc_torque[2] - (self.alpha / Snorm) * (
+                            Si[0] * self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]) - Si[1] *
+                                self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]))
                 #print(i, t, [dSixdt, dSiydt, dSizdt])
 
 
@@ -91,23 +80,21 @@ class Spin_wave():
                 ba = i - 1
                 Sib = [self.J * S[3 * ba + 0], self.J * S[3 * ba + 1], self.J * S[3 * ba + 2]]
                 Sif = [0, 0, 0]
-                B = self.B
-
-                Snorm = np.linalg.norm(S)
-                KneZ = [self.K * Si[1] * Si[2] / (Snorm * Snorm), -self.K * Si[2] * Si[0] / (Snorm * Snorm), 0]
-
-                ScrSSB = [(Si[1] * (Sib[2] + Sif[2]  -self.gamma * B[2]) - Si[2] * (Sib[1] + Sif[1] -self.gamma * B[1])),
-                          (Si[2] * (Sib[0] + Sif[0] -self.gamma * B[0]) - Si[0] * (Sib[2] + Sif[2] -self.gamma * B[2])),
-                          (Si[0] * (Sib[1] + Sif[1] -self.gamma * B[1]) - Si[1] * (Sib[0] + Sif[0] -self.gamma * B[0]))]
+                B_e = [Sib[0] + Sif[0] + self.B[0] + self.Kx * Si[0] / (Snorm * Snorm),
+                       Sib[1] + Sif[1] + self.B[1] + self.Ky * Si[1] / (Snorm * Snorm),
+                       Sib[2] + Sif[2] + self.B[2] + self.Kz * Si[2] / (Snorm * Snorm)]
 
 
 
-                dSixdt = ScrSSB[0] + KneZ[0] - (self.alpha / Snorm) * (
-                        Si[1] * (ScrSSB[2] + KneZ[2]) - Si[2] * (ScrSSB[1] + KneZ[1]))
-                dSiydt = ScrSSB[1] + KneZ[1] - (self.alpha / Snorm) * (
-                        Si[2] * (ScrSSB[0] + KneZ[0]) - Si[0] * (ScrSSB[2] + KneZ[2]))
-                dSizdt = ScrSSB[2] + KneZ[2] - (self.alpha / Snorm) * (
-                        Si[0] * (ScrSSB[1] + KneZ[1]) - Si[1] * (ScrSSB[0] + KneZ[0]))
+                dSixdt = - self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]) - (self.alpha / Snorm) * (
+                        Si[1] * (self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1])) - Si[2] *
+                        self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]))
+                dSiydt = - self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]) - (self.alpha / Snorm) * (
+                        Si[2] * (self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2])) - Si[0] *
+                        self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1]))
+                dSizdt = - self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1]) - (self.alpha / Snorm) * (
+                        Si[0] * self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]) - Si[1] *
+                        self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]))
 
                 dSdt = np.append(dSdt, [dSixdt, dSiydt, dSizdt])
 
@@ -115,24 +102,23 @@ class Spin_wave():
             else:
                 fo = i + 1
                 ba = i - 1
-                Sib = [S[3 * ba + 0], S[3 * ba + 1], S[3 * ba + 2]]
-                Sif = [S[3 * fo + 0], S[3 * fo + 1], S[3 * fo + 2]]
-                B = self.B
+                Sib = [self.J * S[3 * ba + 0], self.J * S[3 * ba + 1], self.J * S[3 * ba + 2]]
+                Sif = [self.J * S[3 * fo + 0], self.J * S[3 * fo + 1], self.J * S[3 * fo + 2]]
+                #B_e = [Sib[0] + Sif[0] + self.B[0] + self.Kx * S[0] / (Snorm * Snorm), Sib[1] + Sif[1] + self.B[1] + self.Ky * S[1]/(Snorm * Snorm), Sib[2] + Sif[2] + self.B[2] + self.Kz * S[2]/(Snorm * Snorm)]
+                B_e = [Sib[0] + Sif[0] + self.B[0] + self.Kx * Si[0] / (Snorm * Snorm),
+                       Sib[1] + Sif[1] + self.B[1] + self.Ky * Si[1] / (Snorm * Snorm),
+                       Sib[2] + Sif[2] + self.B[2] + self.Kz * Si[2] / (Snorm * Snorm)]
+                #print(B_e)
 
-                Snorm = np.linalg.norm(S)
-                KneZ = [self.K * Si[1] * Si[2] / (Snorm * Snorm), -self.K * Si[2] * Si[0] / (Snorm * Snorm), 0]
-
-                ScrSSB = [
-                    (Si[1] * (Sib[2] + Sif[2] - self.gamma * B[2]) - Si[2] * (Sib[1] + Sif[1] - self.gamma * B[1])),
-                    (Si[2] * (Sib[0] + Sif[0] - self.gamma * B[0]) - Si[0] * (Sib[2] + Sif[2] - self.gamma * B[2])),
-                    (Si[0] * (Sib[1] + Sif[1] - self.gamma * B[1]) - Si[1] * (Sib[0] + Sif[0] - self.gamma * B[0]))]
-
-                dSixdt = ScrSSB[0] + KneZ[0] - (self.alpha / Snorm) * (
-                        Si[1] * (ScrSSB[2] + KneZ[2]) - Si[2] * (ScrSSB[1] + KneZ[1]))
-                dSiydt = ScrSSB[1] + KneZ[1] - (self.alpha / Snorm) * (
-                        Si[2] * (ScrSSB[0] + KneZ[0]) - Si[0] * (ScrSSB[2] + KneZ[2]))
-                dSizdt = ScrSSB[2] + KneZ[2] - (self.alpha / Snorm) * (
-                        Si[0] * (ScrSSB[1] + KneZ[1]) - Si[1] * (ScrSSB[0] + KneZ[0]))
+                dSixdt = - self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]) - (self.alpha / Snorm) * (
+                        Si[1] * (self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1])) - Si[2] *
+                        self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]))
+                dSiydt = - self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0])  - (self.alpha / Snorm) * (
+                        Si[2] * (self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2])) - Si[0] *
+                        self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1]))
+                dSizdt = - self.gamma * (B_e[1] * Si[0] - B_e[0] * Si[1])  - (self.alpha / Snorm) * (
+                        Si[0] * self.gamma * (B_e[0] * Si[2] - B_e[2] * Si[0]) - Si[1] *
+                        self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]))
 
                 dSdt = np.append(dSdt, [dSixdt, dSiydt, dSizdt])
                 #print(i, t, [dSixdt, dSiydt, dSizdt])
@@ -148,7 +134,7 @@ class Spin_wave():
 
 
     def get_spin_vec(self,t, i):
-        Ox, Oy, Oz = 3 * i, 0, 0
+        Ox, Oy, Oz = 0, 3 * i, 0
         x = self.S[i*3][t]
         y = self.S[i*3 + 1][t]
         z = self.S[i*3 + 2][t]
@@ -178,8 +164,8 @@ class Spin_wave():
         for i in range(self.N):
             self.quiver_dic[i] = self.ax.quiver(*self.get_spin_vec(0, i))
 
-        self.ax.set_xlim(-4, 332)
-        self.ax.set_ylim(-2, 2)
+        self.ax.set_xlim(-2, 2)
+        self.ax.set_ylim(-2, 300)
         self.ax.set_zlim(-2, 2)
         #self.ax.view_init(elev=90)
 
@@ -192,6 +178,7 @@ class Spin_wave():
         self.S0 = np.reshape(self.S0, (1, -1))
         self.S0 = list(self.S0[0])
         #self.fig, self.ax = plt.subplots(subplot_kw=dict(projection="3d"))
+        print(self.S0)
 
         self.Sol = sc.integrate.solve_ivp(self.func_S, self.t, self.S0, t_eval=self.t_eval)
         self.S = self.Sol.y
@@ -221,23 +208,34 @@ class Spin_wave():
 
 
 if __name__ == '__main__':
-    n = 100
+    n = 50
     S0 = np.zeros((n, 3))
 
     for i in range(n):
-        S0[i][2] = 1
-    #print(S0)
+        S0[i][0] = 1
+        S0[i][2] = 0.3
 
-    t = [0,200]  # t(時間)が0〜100まで動き、その時のfを求める。
-    t_eval = np.linspace(*t, 2000)
+
+    t = [0,100]  # t(時間)が0〜100まで動き、その時のfを求める。
+    t_eval = np.linspace(*t, 200)
+
+    mu_0 = 1.2
+    gamma = 2.8
+    h_div_2e = [0.329, -15]
+    sta_M = [1.4, 0]  # 飽和磁化(T)で入れる
+    theta = [-2.2, -1]
+    j = [4.5, 12]
+    d = [1.48, -9]
+    Hsn = h_div_2e[0] * theta[0] * j[0] / (sta_M[0] * d[0])
+    Hso = h_div_2e[1] + theta[1] + j[1] - (sta_M[1] + d[1])
+    Hs = Hsn * (10 ** Hso) * 1000 * (mu_0 / 1200000) * mu_0  # 最後の1000はmTにするため
+
     pulse = []
-    for i in range(30):
-        tempul = [i,i+0.8,[0,-100,0]]
+    for i in range(1):
+        tempul = [3 + i, 3 + i + 2, [0, -Hs, 0]]
         pulse.append(tempul)
 
-    print(pulse)
 
-
-    spin = Spin_wave(0.0001, 0.01, [0.01, 0, 0], S0, t, t_eval, 0.1, 0.1, 1, pulse, n, 1)
+    spin = Spin_wave(0.0001, gamma, [0, 0, mu_0 * 12], S0, t, t_eval, mu_0 * 4,0,- mu_0 * 41.6, 0, pulse, n, 1)
     spin.doit()
     #spin.make_i2D_graph(50,2)
