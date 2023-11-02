@@ -38,7 +38,7 @@ class Spin_wave():
             Snorm = np.linalg.norm(Si)
             Sib = []
             Sif = []
-            if i == 0:
+            if i <= 1:
                 for Bi in self.pulse:
                     fo = i + 1
                     Sib = [0, 0, 0]
@@ -77,6 +77,8 @@ class Spin_wave():
                 dSdt = np.append(dSdt, [dSixdt, dSiydt, dSizdt])
 
             elif i == self.N - 1:
+                a = self.alpha
+                self.alpha = 0.01
                 ba = i - 1
                 Sib = [self.J * S[3 * ba + 0], self.J * S[3 * ba + 1], self.J * S[3 * ba + 2]]
                 Sif = [0, 0, 0]
@@ -97,6 +99,7 @@ class Spin_wave():
                         self.gamma * (B_e[2] * Si[1] - B_e[1] * Si[2]))
 
                 dSdt = np.append(dSdt, [dSixdt, dSiydt, dSizdt])
+                self.alpha = a
 
 
             else:
@@ -208,7 +211,7 @@ class Spin_wave():
 
 
 if __name__ == '__main__':
-    n = 50
+    n = 100
     S0 = np.zeros((n, 3))
 
     for i in range(n):
@@ -216,8 +219,8 @@ if __name__ == '__main__':
         S0[i][2] = 0.3
 
 
-    t = [0,100]  # t(時間)が0〜100まで動き、その時のfを求める。
-    t_eval = np.linspace(*t, 200)
+    t = [0,10]  # t(時間)が0〜100まで動き、その時のfを求める。
+    t_eval = np.linspace(*t, 2000)
 
     mu_0 = 1.2
     gamma = 2.8
@@ -232,10 +235,10 @@ if __name__ == '__main__':
 
     pulse = []
     for i in range(1):
-        tempul = [3 + i, 3 + i + 2, [0, -Hs, 0]]
+        tempul = [1 + i, 1 + i +0.2, [0, -Hs, 0]]
         pulse.append(tempul)
 
 
-    spin = Spin_wave(0.0001, gamma, [0, 0, mu_0 * 12], S0, t, t_eval, mu_0 * 4,0,- mu_0 * 41.6, 0, pulse, n, 1)
+    spin = Spin_wave(0.001, gamma, [0, 0, mu_0 * 12], S0, t, t_eval, mu_0 * 4,0,- mu_0 * 41.6, 0, pulse, n, 3)
     spin.doit()
-    #spin.make_i2D_graph(50,2)
+    spin.make_i2D_graph(50,2)
