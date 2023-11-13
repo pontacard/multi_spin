@@ -49,7 +49,7 @@ class FMR_Phase_space(FMR):
         plt.plot(t, x)
         plt.xlabel("t")
         plt.ylabel("Sx")
-        plt.savefig(f"FMR_84mT_tSx_{i + 1}.png")
+        #plt.savefig(f"FMR_84mT_tSx_{i + 1}.png")
         plt.show()
 
         N = len(x)  # サンプル数
@@ -61,7 +61,7 @@ class FMR_Phase_space(FMR):
         Amp = abs(y_fft / (N / 2))  # 音の大きさ（振幅の大きさ）
         plt.plot(freq[1:int(N / 2)], Amp[1:int(N / 2)])  # A-f グラフのプロット
         #plt.xscale("log")  # 横軸を対数軸にセット
-        plt.savefig(f"FMR_84mT_Fourier_{i + 1}.png")
+        #plt.savefig(f"FMR_84mT_Fourier_{i + 1}.png")
 
         plt.show()
         """
@@ -98,15 +98,15 @@ class FMR_Phase_space(FMR):
         plt.show()
 
 if __name__ == '__main__':
-        n = 50
+        n = 100
         S0 = np.zeros((n, 3))
 
         for i in range(n):
             S0[i][0] = 0.9571
             S0[i][2] = 0.259
 
-        t = [0, 40]  # t(時間)が0〜100まで動き、その時のfを求める。
-        t_eval = np.linspace(*t, 200000)
+        t = [0, 1000]  # t(時間)が0〜100まで動き、その時のfを求める。
+        t_eval = np.linspace(*t, 10000)
 
         mu_0 = 1.2
         gamma = 0.17
@@ -138,7 +138,7 @@ if __name__ == '__main__':
         print(Hs)
 
         spin = FMR_Phase_space(0, 0, gamma, [0, 0, -mu_0 * 12], S0, t, t_eval, 0, 0, mu_0 * 220, 0,
-                               [Hs,Hs,0],[47,47,0], n, 1, 0, 100)
+                               [Hs,Hs,0],[2 * np.pi * 6.75, 2 * np.pi * 6.75 ,0], n, 1000, 0, 100)
 
         spin.solving()
         spin.make_phase_graph(0, 1, 2)

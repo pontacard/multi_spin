@@ -104,7 +104,7 @@ if __name__ == '__main__':
         t_eval = np.linspace(*t, 200000)
 
         mu_0 = 1.2
-        gamma = 0.028
+        gamma = 0.17
         h_div_2e = [0.329, -15]
         sta_M = [1.4, 0]  # 飽和磁化(T)で入れる
         theta = [-2.2, -1]

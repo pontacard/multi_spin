@@ -136,5 +136,5 @@ if __name__ == '__main__':
     Hs = Hsn * (10 ** Hso) * 1000 * (mu_0 / 1200000) * mu_0  # 最後の1000はmTにするため
     print(Hs)
 
-    spin = Sin_Spin_wave(0.0001,0.1, gamma, [0, 0, mu_0 * 12], S0, t, t_eval, 0,0,260, 0, [Hs,Hs,0],[77,77,0] ,n, 1,0,100)
+    spin = Sin_Spin_wave(0.0001,0.1, gamma, [0, 0, mu_0 * 12], S0, t, t_eval, 0,0,260, 0, [Hs,Hs,0],[77,77,0] ,n, 100,0,100)
     spin.doit()
