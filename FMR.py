@@ -114,7 +114,7 @@ class FMR(Sin_Spin_wave):
         return dSdt
 
 if __name__ == '__main__':
-    n = 100
+    n = 50
     S0 = np.zeros((n, 3))
 
     for i in range(n):

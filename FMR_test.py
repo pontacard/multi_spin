@@ -30,8 +30,10 @@ class FMR_Phase_space(FMR):
         plt.plot(x,y)
         plt.xlabel("Sx")
         plt.ylabel("Sy")
-        #plt.savefig(f"TypeZ_{i+1}_SxSy_{Hs}.png")
+        plt.savefig(f"FMR_84mT_SxSy_{i+1}.png")
         plt.show()
+
+        """
 
         plt.plot(x, z)
         plt.xlabel("Sx")
@@ -42,23 +44,27 @@ class FMR_Phase_space(FMR):
         plt.xlabel("Sz")
         plt.ylabel("Sy")
         plt.show()
+        """
 
         plt.plot(t, x)
         plt.xlabel("t")
         plt.ylabel("Sx")
+        plt.savefig(f"FMR_84mT_tSx_{i + 1}.png")
         plt.show()
 
         N = len(x)  # サンプル数
-        f_s = 4000  # サンプリングレート f_s[Hz] (任意)
-        dt = 1 / f_s  # サンプリング周期 dt[s]
+        f_s = 400  # サンプリングレート f_s[Hz] (任意)
+        dt = (self.t[1] - self.t[0]) / len(self.t_eval)  # サンプリング周期 dt[s]
 
         y_fft = np.fft.fft(x)  # 離散フーリエ変換
         freq = np.fft.fftfreq(N, d=dt)  # 周波数を割り当てる（※後述）
         Amp = abs(y_fft / (N / 2))  # 音の大きさ（振幅の大きさ）
         plt.plot(freq[1:int(N / 2)], Amp[1:int(N / 2)])  # A-f グラフのプロット
         #plt.xscale("log")  # 横軸を対数軸にセット
+        plt.savefig(f"FMR_84mT_Fourier_{i + 1}.png")
 
         plt.show()
+        """
 
         plt.plot(t, z)
         plt.xlabel("t")
@@ -66,8 +72,8 @@ class FMR_Phase_space(FMR):
         plt.show()
 
         N = len(z)  # サンプル数
-        f_s = 4000  # サンプリングレート f_s[Hz] (任意)
-        dt = 1 / f_s  # サンプリング周期 dt[s]
+        f_s = 400  # サンプリングレート f_s[Hz] (任意)
+        dt = (self.t[1] - self.t[0]) / len(self.t_eval)  # サンプリング周期 dt[s]
 
         y_fft = np.fft.fft(z)  # 離散フーリエ変換
         freq = np.fft.fftfreq(N, d=dt)  # 周波数を割り当てる（※後述）
@@ -77,6 +83,7 @@ class FMR_Phase_space(FMR):
 
         plt.show()
         #plt.show()
+        """
 
     def make_3d(self,i):
         t = self.t_eval
@@ -91,18 +98,18 @@ class FMR_Phase_space(FMR):
         plt.show()
 
 if __name__ == '__main__':
-        n = 100
+        n = 50
         S0 = np.zeros((n, 3))
 
         for i in range(n):
             S0[i][0] = 0.9571
             S0[i][2] = 0.259
 
-        t = [0, 100]  # t(時間)が0〜100まで動き、その時のfを求める。
+        t = [0, 40]  # t(時間)が0〜100まで動き、その時のfを求める。
         t_eval = np.linspace(*t, 200000)
 
         mu_0 = 1.2
-        gamma = 2.8
+        gamma = 0.17
         h_div_2e = [0.329, -15]
         sta_M = [1.4, 0]  # 飽和磁化(T)で入れる
         theta = [-2.2, -1]
@@ -128,15 +135,17 @@ if __name__ == '__main__':
         for i in range(n):
             S0[i][2] = 1
 
-        spin = FMR_Phase_space(0.0001, 0.1, gamma, [0, 0, -mu_0 * 12], S0, t, t_eval, 0, 0, mu_0 * 220, 0,
-                               [Hs,Hs,0],[77,77,0], n, 1, 0, 100)
+        print(Hs)
+
+        spin = FMR_Phase_space(0, 0, gamma, [0, 0, -mu_0 * 12], S0, t, t_eval, 0, 0, mu_0 * 220, 0,
+                               [Hs,Hs,0],[47,47,0], n, 1, 0, 100)
 
         spin.solving()
         spin.make_phase_graph(0, 1, 2)
         spin.make_phase_graph(24, 1, 2)
         spin.make_phase_graph(49, 1, 2)
-        spin.make_phase_graph(99, 1, 2)
+        #spin.make_phase_graph(99, 1, 2)
         spin.make_3d(0)
         spin.make_3d(24)
         spin.make_3d(49)
-        spin.make_3d(99)
+        #spin.make_3d(99)

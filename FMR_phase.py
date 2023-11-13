@@ -48,9 +48,11 @@ class FMR_Phase_space(FMR):
         plt.ylabel("Sx")
         plt.show()
 
+
         N = len(x)  # サンプル数
-        f_s = 4000  # サンプリングレート f_s[Hz] (任意)
-        dt = 1 / f_s  # サンプリング周期 dt[s]
+        f_s = 400  # サンプリングレート f_s[Hz] (任意)
+        dt = (self.t[1] - self.t[0]) / len(self.t_eval)  # サンプリング周期 dt[s]
+
 
         y_fft = np.fft.fft(x)  # 離散フーリエ変換
         freq = np.fft.fftfreq(N, d=dt)  # 周波数を割り当てる（※後述）
@@ -66,8 +68,8 @@ class FMR_Phase_space(FMR):
         plt.show()
 
         N = len(z)  # サンプル数
-        f_s = 4000  # サンプリングレート f_s[Hz] (任意)
-        dt = 1 / f_s  # サンプリング周期 dt[s]
+        f_s = 400  # サンプリングレート f_s[Hz] (任意)
+        dt = (self.t[1] - self.t[0]) / len(self.t_eval)  # サンプリング周期 dt[s]
 
         y_fft = np.fft.fft(z)  # 離散フーリエ変換
         freq = np.fft.fftfreq(N, d=dt)  # 周波数を割り当てる（※後述）
@@ -102,7 +104,7 @@ if __name__ == '__main__':
         t_eval = np.linspace(*t, 200000)
 
         mu_0 = 1.2
-        gamma = 2.8
+        gamma = 0.028
         h_div_2e = [0.329, -15]
         sta_M = [1.4, 0]  # 飽和磁化(T)で入れる
         theta = [-2.2, -1]
@@ -128,7 +130,7 @@ if __name__ == '__main__':
         for i in range(n):
             S0[i][2] = 1
 
-        spin = FMR_Phase_space(0.0001, 0.1, gamma, [0, 0, -mu_0 * 12], S0, t, t_eval, 0, 0, mu_0 * 220, 0,
+        spin = FMR_Phase_space(0, 0, gamma, [0, 0, -mu_0 * 12], S0, t, t_eval, 0, 0, mu_0 * 220, 0,
                                [Hs,Hs,0],[770,770,0], n, 1, 0, 100)
 
         spin.solving()
